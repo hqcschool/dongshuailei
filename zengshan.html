@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="../vue.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/layui@2.6.8/dist/css/layui.css" />
+    <script src="https://unpkg.com/layui@2.6.8/dist/layui.js"></script>
+</head>
+<style>
+    table {
+        width: 1200px;
+        border-collapse: collapse;
+        margin: auto;
+    }
+
+    table thead tr {
+        border: none;
+        border-bottom: 1px solid #ccc;
+    }
+
+    table thead tr th {
+        text-align: center !important;
+        font-weight: 100;
+    }
+
+    table tbody tr {
+        height: 128px !important;
+        border-bottom: 1px solid #ccc;
+        text-align: center;
+    }
+
+    table tbody tr td {
+        text-align: center;
+    }
+</style>
+
+<body>
+    <div id="box">
+        <input type="text" v-model="num1">+
+        <input type="text" v-model="num2">={{+num1+ + +num2}}
+     </div>
+     <br>
+     <script>
+        new Vue({
+           el:'#box',
+           data:{
+               num1:'',
+               num2:'',
+           }
+        })
+   </script>
+    <div id="app">
+        <button class="layui-btn layui-btn-normal" @click="tianjia">{{str}}</button>
+        <div  style="
+          width: 450px;
+          padding: 20px;
+          margin: auto;
+        ">
+            <div class="layui-form-item">
+                <label class="layui-form-label">名字</label>
+                <div class="layui-input-block">
+                    <input type="text" required lay-verify="required" placeholder="请输入名字" autocomplete="off"
+                        class="layui-input" v-model="user" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">年龄</label>
+                <div class="layui-input-block">
+                    <input type="text" required lay-verify="required" placeholder="请输入年龄" autocomplete="off"
+                        class="layui-input" v-model="user1" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">性别</label>
+                <div class="layui-input-block">
+                    <input type="text" required lay-verify="required" placeholder="请输入性别" autocomplete="off"
+                        class="layui-input" v-model="user2" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">搜索框：</label>
+                <div class="layui-input-block">
+                  <input type="text" name="title" required lay-verify="required" @keyup.enter="sou()" placeholder="请输入要搜索的文字"
+                    autocomplete="off" class="layui-input" v-model="sousu" id="sousuo">
+                </div>
+              </div>
+            </button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>姓名</th>
+                    <th>年龄</th>
+                    <th>性别</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(item,index) in list" :key="index">
+                    <td align="right">{{item.name}}</td>
+                    <td align="left" class="yang">{{item.age}}</td>
+                    <td class="aa">{{item.sex}}</td>
+                    <td>
+                        <button class="layui-btn layui-btn-danger" @click="shan(index)">
+                            删除
+                        </button>
+                        <button class="layui-btn layui-btn-danger" @click="xiu(index)">
+                            修改
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+<script>
+    new Vue({
+      el: "#app",
+      data: {
+        sousu: '',
+        arr: [],
+        list: [{
+          name: '小明',
+          age: '18',
+          sex: '男',
+        },
+        {
+            name: '小红',
+            age: '22',
+            sex: '女',
+        },
+        {
+            name: '李四',
+          age: '39',
+          sex: '男',
+        }],
+        user: '',
+        user1: '',
+        user2: '',
+        n: 0,
+        str: '新增',
+      },
+      methods: {
+        tianjia() {
+          if (this.str == '新增') {
+            this.list.push({
+              name: this.user,
+              age: this.user1,
+              sex: this.user2,
+            })
+            this.user = ''
+            this.user1 = ''
+            this.user2 = ''
+          } else {//修改回显值
+            this.list[this.index].name = this.user
+            this.list[this.index].age = this.user1
+            this.list[this.index].sex = this.user2
+            this.user = ''
+            this.user1 = ''
+            this.user2 = ''
+            this.str = '新增'
+          }
+        },
+        //修改
+        xiu(index) {
+          this.list[index]
+          this.user = this.list[index].name
+          this.user1 = this.list[index].age
+          this.user2 = this.list[index].sex
+          this.str = '修改'
+          this.index = index
+        },
+  
+        //删除
+        shan(index) {
+          if (confirm('确认删除吗？')) {
+            this.list.splice(index, 1)
+          }
+        },
+        //搜索
+        sou() {
+          if (this.n == 0) {
+            this.arr = this.list
+          }
+          if (this.sousu == '') {
+            this.list = this.arr
+          } else {
+            this.list = this.arr.filter(item => {
+              if (item.name.includes(this.sousu)) {
+                return item
+              }
+            })
+            this.n = this.n + 1
+          }
+        },
+      },
+    })
+  </script>
+
+</html>
