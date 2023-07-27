@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="./vue.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/layui@2.6.8/dist/css/layui.css"
+    />
+    <script src="https://unpkg.com/layui@2.6.8/dist/layui.js"></script>
+  </head>
+  <style>
+    table {
+      width: 1200px;
+      border-collapse: collapse;
+      margin: auto;
+      margin-top: 10px;
+    }
+
+    table thead tr {
+      border: none;
+      border-bottom: 1px solid #ccc;
+    }
+
+    table thead tr th {
+      text-align: center !important;
+      font-weight: 100;
+    }
+
+    table tbody tr {
+      height: 128px !important;
+      border-bottom: 1px solid #ccc;
+      text-align: center;
+    }
+
+    table tbody tr td {
+      text-align: center;
+    }
+
+    .a {
+      background-color: yellow;
+    }
+
+    .b {
+      background-color: pink;
+    }
+
+    tbody > tr:hover {
+      background-color: chocolate;
+    }
+  </style>
+
+  <body>
+    <div id="app">
+      <input
+        type="text"
+        v-model="name"
+        style="margin: 10px"
+        placeholder="输入姓名"
+      />
+      <select name="city" lay-verify="required" v-model="sex">
+        <option value="">请选择性别</option>
+        <option value="男">男</option>
+        <option value="女">女</option>
+      </select>
+      <input type="text" v-model="age" placeholder="输入年龄" />
+      <button class="layui-btn layui-btn-normal" @click="tianjia">添加</button>
+      <br />
+      <select name="city" lay-verify="required" v-model="ziduan">
+        <option value="">选择一个字段进行排序</option>
+        <option value="编号">编号</option>
+        <option value="年龄">年龄</option>
+      </select>
+      <select name="city" lay-verify="required"  v-model="pai">
+        <option value="">选择一个排序方式</option>
+        <option value="升序">升序</option>
+        <option value="降序">降序</option>
+      </select>
+      <button class="layui-btn layui-btn-normal" @click="paixu()">排序</button>
+      <table>
+        <thead>
+          <tr>
+            <th>
+              全选<input
+                type="checkbox"
+                @click="quanxuan"
+                v-model="checkedAll"
+                style="margin: 10px"
+              />
+            </th>
+            <th>编号</th>
+            <th>姓名</th>
+            <th>性别</th>
+            <th>年龄</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="(item,index) in list"
+            :key="index"
+            :class="index%2==1?'a':'b'"
+          >
+            <td><input type="checkbox" v-model="item.checked" /></td>
+            <td>{{item.id}}</td>
+            <td>{{item.name}}</td>
+            <td>{{item.sex}}</td>
+            <td>{{item.age}}</td>
+            <td>
+              <button
+                class="layui-btn layui-btn-normal"
+                @click="shangyi(index)"
+              >
+                上移
+              </button>
+              <button class="layui-btn layui-btn-normal" @click="xiayi(index)">
+                下移
+              </button>
+              <button
+                class="layui-btn layui-btn-normal"
+                @click="shanchu(index)"
+              >
+                删除
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+  <script>
+    new Vue({
+      el: "#app",
+      data: {
+        list: [
+          {
+            id: 1,
+            name: "张三",
+            sex: "男",
+            age: 2,
+            checked: false,
+          },
+          {
+            id: 2,
+            name: "李四",
+            sex: "男",
+            age: 3,
+            checked: false,
+          },
+          {
+            id: 3,
+            name: "小红",
+            sex: "女",
+            age: 1,
+            checked: false,
+          },
+        ],
+        name: "",
+        sex: "",
+        age: "",
+        ziduan: "",
+        pai: "",
+        checkedAll: false,
+      },
+      methods: {
+        tianjia() {
+          this.list.push({
+            id: this.list.length + 1,
+            name: this.name,
+            sex: this.sex,
+            age: this.age,
+          });
+        },
+        shangyi(index) {
+          if (index > 0) {
+            const shangyi = this.list[index - 1];
+            this.list.splice(index - 1, 1);
+            this.list.splice(index, 0, shangyi);
+          } else {
+            alert("已经是第一条了");
+          }
+        },
+        xiayi(index) {
+          if (index + 1 === this.list.length) {
+            alert("已经最后一条了");
+          } else {
+            const xiayi = this.list[index + 1];
+            this.list.splice(index + 1, 1);
+            this.list.splice(index, 0, xiayi);
+          }
+        },
+        shanchu(index) {
+          if (confirm("确认删除吗？")) {
+            this.list.splice(index, 1);
+          }
+        },
+        paixu() {   
+             if (this.ziduan=='年龄') {
+                  if (this.ziduan == "年龄" || this.pai == "升序") {
+              this.list.sort((a, b) => a.age - b.age);
+            }
+            if (this.pai == "降序") {
+                this.list.sort((a, b) => b.age - a.age);
+            }
+        }
+            if (this.ziduan=='编号') {
+                  if (this.ziduan == "编号" || this.pai == "升序") {
+              this.list.sort((a, b) => a.id - b.id);
+            }
+            if (this.pai == "降序") {
+                this.list.sort((a, b) => b.id - a.id);
+            }
+          }
+        },
+        tabdata() {},
+        quanxuan() {
+          for (let item of this.list) {
+            item.checked = !this.checkedAll;
+          }
+        },
+      },
+    });
+  </script>
+</html>
