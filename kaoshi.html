@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="./vue.js"></script>
+  </head>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    li {
+      list-style: none;
+    }
+  </style>
+
+  <body>
+    <div id="app">
+      <div
+        style="
+          width: 1192px;
+          height: 650px;
+          margin: auto;
+          margin-top: 10px;
+          display: flex;
+          cursor: pointer;
+          flex-wrap: wrap;
+        "
+      >
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            width: 216px;
+            align-items: center;
+            height: 338px;
+            margin-right: 20px;
+          "
+          v-for="item in list"
+          :key="item.id"
+          @click="dianji(item)"
+        >
+          <img :src="item.img" alt="" style="width: 216px; height: 218px" />
+          <div
+            style="
+              vertical-align: bottom;
+              overflow: hidden;
+              height: 30px;
+              display: flex;
+              align-items: flex-end;
+            "
+          >
+            <span
+              style="
+                border-radius: 15px;
+                color: #fff;
+                padding: 0 4px;
+                margin-right: 4px;
+                height: 18px;
+                font-size: 12px;
+                display: inline-block;
+                background-color: #ff38c0;
+              "
+              >{{item.tejia}}</span
+            >
+            <span
+              style="
+                color: #333;
+                font-size: 23px;
+                line-height: 18px;
+                font-weight: 700;
+                text-overflow: ellipsis;
+                max-width: 194px;
+                margin-top: 10px;
+                height: 18px;
+                display: inline-block;
+              "
+              >{{item.jiage}}</span
+            >
+            <span
+              style="
+                text-decoration: line-through;
+                color: #999;
+                line-height: 14px;
+                margin-left: 4px;
+                font-size: 14px;
+              "
+              >{{item.huaxian}}</span
+            >
+            <span
+              style="
+                color: #999;
+                line-height: 14px;
+                margin-left: 4px;
+                font-size: 14px;
+              "
+              >{{item.dazhe}}</span
+            >
+          </div>
+          <span
+            style="
+              font-size: 12px;
+              color: #666;
+              line-height: 18px;
+              margin-bottom: 8px;
+              padding-top: 20px;
+            "
+            >{{item.jianjie}}</span
+          >
+        </div>
+      </div>
+
+      <div style="margin-right: auto; margin-left: auto; width: 960px">
+        <div
+          style="
+            border-bottom: 1px solid #d0d0d0;
+            margin-bottom: 30px;
+            font-weight: 700;
+          "
+        >
+          <div
+            style="
+              position: relative;
+              bottom: -1px;
+              display: inline-block;
+              font-size: 16px;
+              color: #333;
+              padding: 15px 10px;
+              margin-right: 10px;
+              color: #f10180;
+              color: #f10180;
+              padding-bottom: 12px;
+              border-bottom: 3px solid #f10180;
+            "
+          >
+            <span
+              style="
+                color: #f10180;
+                padding-bottom: 12px;
+                border-bottom: 3px solid #f10180;
+                font-size: 16px;
+                color: #f10180;
+                padding-bottom: 12px;
+              "
+              >特卖商品 {{shiajan}}:{{jianasd}}</span
+            >
+            <!-- <span style="padding-left: 10px">20</span>
+            <span>:</span>
+            <span>00</span> -->
+          </div>
+        </div>
+
+        <div style="margin-bottom: 30px">
+          <span>配送至</span>
+          <span style="font-weight: 700; margin-left: 5px">和平区</span>
+          <span>|</span>
+          <span
+            >勾选商品 "
+            <img
+              style="margin-left: 10px"
+              src="https://shop.vipstatic.com/v2/dist/front/biz/cart/asset/img/te5/commons/multiplechoice_selected_normal-hash-e072799d.png"
+              alt=""
+            />
+            ”即可锁定库存20分钟，倒计时内不用担心商品被抢走～
+          </span>
+        </div>
+
+        <div style="width: 958px; height: 40px; background-color: #f9f9f9">
+          <ul
+            style="
+              border: 1px solid #e0e0e0;
+              height: 38px;
+              line-height: 38px;
+              display: flex;
+              justify-content: space-around;
+            "
+          >
+            <li style="width: 300px; text-align: center">商品</li>
+            <li>单价</li>
+            <li>数量</li>
+            <li>操作</li>
+          </ul>
+        </div>
+        <div
+          style="
+            font-family: MicrosoftYaHei;
+            font-size: 16px;
+            color: #f10180;
+            padding: 20px 15px 16px 15px;
+          "
+        >
+          唯品自营
+          
+        </div>
+        <table>
+          <tbody>
+            <tr
+              v-for="(item,index) in cart"
+              :key="item.id"
+              style="width: 958px; height: 101px"
+            >
+              <td style="width: 35px; height: 100%">
+                <input type="checkbox" style="margin-right: 20px" @change="fun(item)" />
+              </td>
+              <td>
+                <img
+                  :src="item.img"
+                  alt=""
+                  style="
+                    width: 74px;
+                    height: 74px;
+                    margin-left: 10px;
+                    margin-right: 20px;
+                  "
+                />
+              </td>
+              <td style="width: 300px">
+                <span
+                  style="
+                    width: 180px;
+                    height: 30px;
+                    font-size: 83%;
+                    display: inline-block;
+                  "
+                  >{{item.jianjie}}</span
+                >
+              </td>
+              <td style="width: 162px; text-align: center">
+                <span>￥{{item.jiage}}</span>
+              </td>
+              <td style="width: 190px; text-align: center">
+                <span style="width: 90px; height: 24px; display: inline-block">
+                  <button style="width: 22px; border: none" @click="jian(item)">-</button>
+                  <input type="text" style="width: 28px; border: none" v-model="item.shu"/>
+                  <button style="width: 22px; border: none"@click="jia(item)">+</button>
+                </span>
+              </td>
+              <td style="width: 177px; text-align: center">
+                <button style="border: none" @click="shanchu(item)">
+                  删除
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div style="width: 958px;height: 162px;border: 1px solid gray;">
+            <div style="width: 918px;height: 79px;padding: 18px 20px 15px;font-size: 12px;">
+                <p style="float: right;">
+                    <span>共</span>
+                    <span style="color: red;">{{num}}</span>
+                    <span>商品</span>
+                    &nbsp;
+                    <span>商品金额</span>
+                    &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;
+                    <span>{{totalPrice}}</span>
+                    &nbsp;  &nbsp;  
+                </p>
+                <br><br><br>
+                <p style="float: right;">
+                    <span>总金额</span>
+<span>(未包含运费)</span>
+                    &nbsp;
+                    &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;
+                    <span style="color: red;">{{totalPrice}}</span>
+                    &nbsp;  &nbsp;  
+                </p>
+            </div>
+<div style="height: 50px;">
+    <span style="float: right;">
+        <button style="width: 250px;height: 48px;background-color: #f10180;border: 1px solid #f10180;">
+          <span style="color: white;">立即结算 {{shiajan}}:{{jianasd}}</span>
+          <!-- <span style="color: white;">20</span>
+          <span style="color: white;">:</span>
+          <span style="color: white;">00</span> -->
+        </button>
+    </span>
+    <span style="font-size: 15px;float: right;margin-top: 15px;margin-right: 30px;">请在倒计时结束结算</span>
+</div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    new Vue({
+      el: "#app",
+      data: {
+        shuliang:0,
+        list: [
+          {
+            checked: false,
+            id: 1,
+            img: "https://h2.appsimg.com/a.appsimg.com/upload/merchandise/pdcvis/600391/2023/0331/117/20196fbe-cd5a-48e5-b63c-c98e7ce2e879_218x218_90.jpg",
+            tejia: "特卖价",
+            jiage: 198,
+            huaxian: "￥689",
+            dazhe: "2.9折",
+            jianjie: "【新中国改良汉服旗袍连衣裙】国风立领盘扣刺绣微透...",
+            shu:1,
+          },
+          {        checked: false,
+
+            id: 2,
+            img: "https://h2.appsimg.com/a.appsimg.com/upload/merchandise/pdcvis/2023/07/10/87/86e1da11-96e0-433a-8d11-0d6fbd3dfb7f_218x218_90.jpg",
+            tejia: "特卖价",
+            jiage: 196.8,
+            huaxian: "￥896",
+            dazhe: "2.2折",
+            jianjie: "改良汉服连衣裙女2023新款夏装古风国朝古风渐变花印裙子...", shu:1
+          },
+          {        checked: false,
+
+            id: 3,
+            img: "https://h2.appsimg.com/a.appsimg.com/upload/merchandise/pdcvis/2023/07/06/121/b904a2f5-27c1-432b-a811-c83315da3fb6_218x218_90.jpg",
+            tejia: "特卖价",
+            jiage: 189,
+            huaxian: "￥689",
+            dazhe: "2.7折",
+            jianjie:
+              "【新中式国风改良旗袍】复古立领斜襟盘扣减龄碎花短袖连衣裙女夏...", shu:1
+          },
+          {        checked: false,
+
+            id: 4,
+            img: "https://h2.appsimg.com/a.appsimg.com/upload/merchandise/pdcvop/00600391/10021818/936846568-3926090234645876737-3926090234645876742-1_218x218_90.jpg",
+            tejia: "特卖价",
+            jiage: 314,
+            huaxian: "￥1089",
+            dazhe: "2.9折",
+            jianjie:
+              "新中式旗袍小清新改良连衣裙2023新款夏竹叶花色古典短袖裙子...", shu:1
+          },
+          {        checked: false,
+
+            id: 5,
+            img: "https://h2.appsimg.com/a.appsimg.com/upload/merchandise/pdcvis/130600/2023/0727/147/6af61a7c-6a54-4d15-a3b9-4bdc5ebb5b95_218x218_90.jpg",
+            tejia: "特卖价",
+            jiage: 250,
+            huaxian: "￥1076",
+            dazhe: "2.3折",
+            jianjie:
+              "【新中式旗袍连衣裙女】2023夏季新品盘扣开叉设计修身A字裙...", shu:1
+          },
+          {        checked: false,
+
+            id: 6,
+            img: "https://h2.appsimg.com/a.appsimg.com/upload/merchandise/pdcvis/2023/06/12/124/596e59f3-5fb2-4a92-ba63-7df4dea26ec0_218x218_90.jpg",
+            tejia: "特卖价",
+            jiage: 399,
+            huaxian: "￥1416",
+            dazhe: "2.8折",
+            jianjie:
+              "【新中式改良旗袍】2023夏季新款风收腰显瘦立领盘扣连衣裙...", shu:1
+          },
+          {        checked: false,
+
+            id: 7,
+            img: "https://h2.appsimg.com/a.appsimg.com/upload/merchandise/pdcvis/606012/2023/0706/190/f4161cdb-e2af-4d3f-9382-741635a5d53e_218x218_90.jpg",
+            tejia: "特卖价",
+            jiage: 278,
+            huaxian: "￥969",
+            dazhe: "2.9折",
+            jianjie:
+              "新中式国风改良旗袍连衣裙女2023夏季新款收腰显瘦气质中长裙...", shu:1
+          },
+          {        checked: false,
+
+            id: 8,
+            img: "https://h2.appsimg.com/a.appsimg.com/upload/merchandise/pdcvis/2023/06/03/72/c144dae4-e99e-42d2-bdda-1925d8ef29ff_218x218_90.jpg",
+            tejia: "特卖价",
+            jiage: 279,
+            huaxian: "￥1999",
+            dazhe: "1.4折",
+            jianjie:
+              "【新中式国风盘扣装饰连衣裙】2023年夏季新品纯色收腰A字裙...", shu:1
+          },
+          {        checked: false,
+
+            id: 9,
+            img: "https://h2.appsimg.com/a.appsimg.com/upload/merchandise/pdcvis/2022/05/19/24/3206d0c1-c2f9-40c0-9373-22bf45261e08_218x218_90.jpg",
+            tejia: "特卖价",
+            jiage: 239,
+            huaxian: "￥855",
+            dazhe: "2.8折",
+            jianjie: "清新复古雅致旗袍夏款改良版中国风旗袍连衣裙女国潮...", shu:1
+          },
+          {        checked: false,
+
+            id: 10,
+            img: "https://h2.appsimg.com/a.appsimg.com/upload/merchandise/pdcvis/2023/04/20/107/637e93b0-b28e-479a-b9e0-91eba709d55c_218x218_90.jpg",
+            tejia: "特卖价",
+            jiage: 299,
+            huaxian: "￥1068",
+            dazhe: "2.8折",
+            jianjie:
+              "【2023夏装新款】新中式旗袍女改良年轻款国风裙子雪纺碎花连衣裙...", shu:1
+          },
+        ],
+        cart: [],
+        shiajan:19,
+        jianasd:59,
+      },
+
+      computed:{
+        totalPrice(){
+            let sum=0
+            this.cart.filter(item=>{
+             if(item.checked==true){
+                sum=item.jiage*item.shu
+                console.log(sum);
+             }
+            })
+            return sum
+        },
+        num(){
+            let num=0
+            this.cart.filter(item=>{
+                if(item.checked){
+                    num++
+                   num=item.shu
+                }
+            })
+            return num
+        }
+      },
+      methods: {
+
+        dianji(index) {
+          console.log(index);
+          if (!this.cart.includes(index)) {
+            this.cart.push(index)
+          }else{
+            alert('不能加了')
+          }
+        },
+        shanchu(item) {
+          if (confirm("确认删除吗？")) {
+            const index = this.cart.indexOf(item);
+            if (index !== -1) {
+              this.cart.splice(index, 1);
+            }
+          }
+        },
+        fun(item){
+            item.checked = !item.checked;
+           if (item.checked==true) {
+                setInterval(()=>{
+                   this.jianasd--
+                   if (this.jianasd<0) {
+                        this.shiajan--
+                        this.jianasd=60
+                   }
+                },100)
+           }
+        },
+        jian(i) {
+            // if()
+            if ( i.shu>0) {
+            i.shu--
+        }else{
+            alert("请输入有效的数量！")
+
+        }
+    //    i++
+      },
+      jia(i){
+        // i++
+       
+        if (i.shu>=0) {
+            i.shu++
+        }else{
+            alert("请输入有效的数量！")
+
+        }
+      },
+      },
+    });
+  </script>
+</html>
